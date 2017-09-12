@@ -1,0 +1,38 @@
+body{
+    font-family: monospace;
+    padding: 0px;
+    margin: 0px;
+}
+
+div.message{
+    margin: 0 auto;
+    font-size: 24px;
+    width: 50vw;
+    height: fit-content;
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #eee;
+    overflow: hidden;
+}
+
+div.messageHeader{
+    font-size: 12px;
+    background-color: #ddd;
+}
+
+#messageArea{
+    height: 80vh;
+    overflow-y: scroll;
+    background-color: #ddd;
+    padding-bottom: 10vh;
+}
+
+#footer{
+    background-color: white;
+}
+
+#textInput{
+    width: 100%;
+    font-size: 5vh;
+    height: 10vh;
+}

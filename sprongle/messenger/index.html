@@ -1,0 +1,59 @@
+<!DOCTYPE=html>
+<html>
+
+<head>
+    <script src="jquery.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body id="body">
+    <div id="messageArea"></div>
+    <div id="footer">
+        <input type="text" id="textInput" onkeydown="checkKeyDown(event)">
+    </div>
+    <script>
+        $.ajaxSetup({
+            // Disable caching of AJAX responses
+            cache: false
+        });
+
+        loadMessages();
+        setInterval(function () { loadMessages(); }, 500);
+        scrollToBottom();
+
+        function sendMessage(message) {
+            var data = new FormData();
+            message = message.replace("<", "");
+            message = message.replace(">", "");
+            data.append("data", "<div class='message'><div class='messageHeader'>"
+                + Date() + "</div><code>" + message + "</code></div>");
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', 'server.php', true);
+            xhr.send(data);
+            loadMessages();
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            setTimeout(function () {
+                elm = document.getElementById("messageArea");
+                elm.scrollTop = elm.scrollHeight;
+            }, 500);
+        }
+
+        function loadMessages() {
+            $("#messageArea").load("data");
+        }
+
+        function checkKeyDown(event) {
+            if (event.keyCode == 13) {
+                console.log("Message sent!");
+                text = document.getElementById("textInput");
+                sendMessage(text.value);
+                text.value = "";
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+<div id="gameOfLife" style="background-color: magenta;"><canvas id="mainCanvas" width="512" height="512">Your browser does not support the HTML5 canvas tag :(</canvas>
+<script>
+    var SIZE = 64;
+    var TILE_SIZE = 8;
+    var context;
+
+    var grid;
+    var tempGrid;
+
+    var img = new Image();
+    img.src = "images/gameOfLifeBox.png";
+
+    // Begin the rendering cycle
+    start();
+    setInterval(update, 30);
+
+    // Initialize the rendering environment
+    function start() {
+
+        context = document.getElementById('mainCanvas').getContext("2d");
+        context.canvas.width = SIZE * TILE_SIZE;
+        context.canvas.height = SIZE * TILE_SIZE;
+
+        grid = new Array(SIZE);
+        for (x = 0; x < SIZE; ++x)
+            grid[x] = new Array(SIZE);
+
+        tempGrid = new Array(SIZE, SIZE);
+        for (x = 0; x < SIZE; ++x)
+            tempGrid[x] = new Array(SIZE);
+
+        for (x = 0; x < SIZE; ++x)
+            for (y = 0; y < SIZE; ++y)
+                grid[x][y] = Math.random() >= 0.75;
+    }
+11
+    // Called once every 10 ms
+    function update() {
+
+        context.fillStyle="red";
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        context.fillRect(0,0,SIZE*TILE_SIZE,SIZE*TILE_SIZE);
+
+        for (x = 1; x < SIZE - 1; ++x)
+            for (y = 1; y < SIZE - 1; ++y) {
+                // Count neighbours
+                var count = 0;
+                for (dx = -1; dx < 2; ++dx)
+                    for (dy = -1; dy < 2; ++dy)
+                        if (grid[x + dx][y + dy])
+                            ++count;
+
+                tempGrid[x][y] = false;
+
+
+                if (grid[x][y]) {
+                    --count; // Don't count myself
+
+                    if (count < 2) tempGrid[x][y] = false;
+                    else if (count < 4) tempGrid[x][y] = true;
+                    else tempGrid[x][y] = false;
+                }
+                else if (count == 3)
+                    tempGrid[x][y] = true;
+            }
+
+        for (x = 1; x < SIZE - 1; ++x)
+            for (y = 1; y < SIZE - 1; ++y)
+                grid[x][y] = tempGrid[x][y];
+
+        for (x = 0; x < SIZE; ++x)
+            for (y = 0; y < SIZE; ++y)
+                if (grid[x][y])
+                    context.drawImage(img, x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+    }
+</script></div>
